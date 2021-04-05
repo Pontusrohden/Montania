@@ -1,56 +1,56 @@
 import React, { useState } from 'react';
 import product from "../data/product.json";
 import './ProductList.css';
-import noImage from "../noImage.jpeg";
-
 
 export default function ProductList() {
 
-    const [stockBalance, setStockBalance] = useState("");
-    const [excludingVat, setExcludingVat] = useState("");
-    const [includingVat, setIncludingVat] = useState("");
-    const [ImgUrl, setImgUrl] = useState("");
     const [categories] = useState(["SERVETT", "LYKTOR", "LJUS", "PORSLIN", ]);
-    const [showInfoPressed, setShowInfoPressed] = useState(false);
-    
-    function showProductInfo(product) {
-        setStockBalance(product.lagersaldo);
-        setExcludingVat(product.pris);
-        setIncludingVat(product.pris + (product.pris + product.momssats / 100));
-        setImgUrl(product.bild.url);
-        console.log(ImgUrl);
+    const [cheapest, setCheapest] = useState(99999999);
+    const [mostExpensive, setMostExpensive] = useState(0);
+   
+    function findCheapest(){
+        product.products.forEach(item => 
+            {if(item.pris < cheapest) {
+                setCheapest(item.pris);
+            }}
+            );
+            return cheapest;
+    } 
+    function findMostExpensive() {
+        product.products.forEach(item => 
+            {if(item.pris > mostExpensive) {
+                setMostExpensive(item.pris);
+            }}
+            );
+            return mostExpensive;
     }
-    
+    var amount = product.products.length;
     var List = categories.map(item => 
         <div>
             <h3>{item}</h3>
-            {product.products.map((product) => (
-            product.artikelkategorier_id === item
-                ? <div className="ListItem">
-                    <li key={product.id}>{product.artiklar_benamning}</li>
-                    <button onClick={() => {showProductInfo(product)}}></button>
-                </div>
-                :null
-            ))}
-        </div>
-    );
-
-    return (
-        <div className="ListComponent">
-            <div className="List">
-                <h1>Produktlista</h1>
-                <ul>
-                    {List}
+            {product.products.map((product, index) => (
+                product.artikelkategorier_id === item
+            ?<div className="ListItem">
+                <ul key={index} className="Item">
+                    <li>Artikel: {product.artiklar_benamning}</li>
+                    <li>Variant {product.artiklar_variant}</li>
+                    <li>I lager: {product.lagersaldo}</li>
+                    <li>Pris Inklusive moms: {product.pris + (product.pris + product.momssats / 100) +"kr"}</li>
                 </ul>
             </div>
-            <div className="ProductInfo">
-                <h1>ProduktInformation</h1>
-                <ul>
-                    <li>LagerSaldo: {stockBalance}</li>
-                    <li>Pris exklusive moms: {excludingVat} kr</li>
-                    <li>Pris Inklusive moms: {includingVat}</li>
-                    <img src={ImgUrl} alt={noImage}></img>
-                </ul>
+                :null
+                ))}
+        </div>
+    );
+    return (
+        <div className="Container">
+            <div className="List">
+                {List}
+            </div>
+            <div className="InfoContainer">
+                <p>Antal artiklar i listan: {amount}</p>
+                <p>Högsta artikelpris: {findMostExpensive()}kr</p>
+                <p>Lägsta artikelpris: {findCheapest()}kr</p>
             </div>
         </div>
     );

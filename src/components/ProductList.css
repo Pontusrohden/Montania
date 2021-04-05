@@ -1,24 +1,34 @@
-.ListComponent {
+.Container {
     display: flex;
     flex-direction: row;
 }
 .List {
     color:aliceblue;
-    width: 40vw;
-}
-.ListItem {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    padding-bottom: 4px;
+    align-items: flex-start;
+    border-right: solid;
+}
+.InfoContainer {
+    color:aliceblue;
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+}
+.ListItem {
+    border-top: solid;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
 }
 .ListItem:hover {
     background-color:#93a2c4;
-    ;
 }
-.ProductInfo {
-    color:aliceblue;
-    padding-left: 10vw;
+
+li {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    margin: auto;
+    font-size: small;
 }
